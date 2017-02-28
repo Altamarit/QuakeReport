@@ -2,6 +2,7 @@
 package com.example.android.quakereport;
 
 import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,7 +56,7 @@ public final class QueryUtils {
 
             //  the fields we are after are in object "features" wich is an array.
             //      each earthquake is an object in the array, key for the object is "feature"
-            JSONArray  earthquakeArray =  jsonRoot.getJSONArray("features");
+            JSONArray earthquakeArray = jsonRoot.getJSONArray("features");
 
             //  Loop into all elements in the array of "features"
             for (int i = 0; i < earthquakeArray.length(); i++) {
@@ -68,10 +69,11 @@ public final class QueryUtils {
                 double magnitud = Double.parseDouble(properties.getString("mag"));
                 String location = properties.getString("place");
                 long timeAsUnixTime = Long.parseLong(properties.getString("time"));
+                String detailPage = properties.getString("url");
 
                 //  add an "Earthquake" object with the magnitud, location and time
                 //      for each earthquake in the file
-                earthquakes.add(new Earthquake(magnitud,location,timeAsUnixTime));
+                earthquakes.add(new Earthquake(magnitud, location, timeAsUnixTime, detailPage));
             }
         } catch (JSONException e) {
             // If an error is thrown when executing any of the above statements in the "try" block,
