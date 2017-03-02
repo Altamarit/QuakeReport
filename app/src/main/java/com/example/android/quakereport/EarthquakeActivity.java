@@ -18,6 +18,7 @@ package com.example.android.quakereport;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -33,25 +34,27 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
+    //private static final String USGS_REQUEST_URL =
+    //        "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2017-01-01&endtime=2017-03-02&minmagnitude=7";
+    private static final String USGS_REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=2017-03-01&endtime=2017-03-02&minmagnitude=1";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.earthquake_activity);
 
-        /*
-        // Create a fake list of earthquake locations.
-        ArrayList<Earthquake> earthquakes = new ArrayList<>();
-        earthquakes.add(new Earthquake("7,5","San Francisco","Feb 2,2016"));
-        earthquakes.add(new Earthquake("6,1","London","July 20,2016"));
-        earthquakes.add(new Earthquake("3,9","Tokyo","Nov 10,2016"));
-        earthquakes.add(new Earthquake("5,4","Mexico City","May 3,2016"));
-        earthquakes.add(new Earthquake("2,8","Moscow","Jan 31,2016"));
-        earthquakes.add(new Earthquake("4,9","Rio de Janeiro","Aug 2,2016"));
-        earthquakes.add(new Earthquake("1,6","Paris","Oct 2,2016"));
-        */
-        // Create a fake list of earthquakes.
-        ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
+
+
+        EarthquakeAssyncTask newtask = new EarthquakeAssyncTask();
+        newtask.execute(USGS_REQUEST_URL);
+
+
+
+    }
+
+    private void updateUi(ArrayList<Earthquake> earthquakes){
 
         // Create an Adaptor view The adapter knows how to create list item views for each item
         // in the list.
@@ -76,5 +79,29 @@ public class EarthquakeActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    private class EarthquakeAssyncTask extends AsyncTask<String, Void, ArrayList<Earthquake>> {
+        @Override
+        protected ArrayList<Earthquake> doInBackground(String... urls) {
+
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
+
+            // Perform the HTTP request for earthquake data and process the response.
+            // Create a fake list of earthquakes.
+            ArrayList<Earthquake> earthquakes = QueryUtils.extractEarthquakes(USGS_REQUEST_URL);
+
+            return earthquakes;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Earthquake> result) {
+            if (result==null){
+                return;
+            }
+            updateUi(result);
+        }
     }
 }

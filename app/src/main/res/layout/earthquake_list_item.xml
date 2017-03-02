@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:text="Near of"
-            android:textSize="15sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/txt_location"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             tools:text="Feb 2, 2015"
-            android:textSize="15sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/txt_time"
@@ -65,6 +65,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             tools:text="3:00 PM"
-            android:textSize="15sp"/>
+            android:textSize="12sp"/>
     </LinearLayout>
 </LinearLayout>
